@@ -42,11 +42,11 @@ const Registro = () => {
             </div>
           </div>
 
-          <div className="col-md-6 col-lg-5 d-none d-md-block">
+          <div className="col-md-6 col-lg-5 d-none d-md-block mt-5">
             <img
               src="https://www.ehcos.com/wp-content/uploads/2017/11/dia-mundial-ux-900x550.jpg"
               alt="login form"
-              className="img-fluid logo_radius" 
+              className="img-fluid logo_radius "  
             />
           </div>
         </div>
