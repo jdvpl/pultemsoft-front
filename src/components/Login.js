@@ -2,7 +2,9 @@ import React, { useState } from 'react';
 
 import {Link} from 'react-router-dom';
 import Logo from '../pultemsoft.png';
-
+import firebaseapp from '../config/firebase-config';
+import {getAuth,signInWithEmailAndPassword} from 'firebase/auth';
+const auth = getAuth(firebaseapp);
 
 const Login = () => {
 
@@ -11,6 +13,13 @@ const Login = () => {
     const email = e.target.elements.email.value;
     const password = e.target.elements.password.value;
 
+    Login(email, password);
+  }
+  const Login=async(email, password)=>{
+    const user=await signInWithEmailAndPassword(auth,email,password).then(userInfo => {
+      return userInfo;
+    })
+    
   }
   return (
     
@@ -47,17 +56,9 @@ const Login = () => {
                   </div>
                   <div className="pt-1 mb-4 d-grid mx-5">
                     <button className="btn btn-green btn-lg btn-block" type="submit">Iniciar sesion</button>
-      
-                    <div className="google-btn" onClick={()=> console.log("a")}>
-                    <div className="google-icon-wrapper ">
-                      <img className="google-icon" src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" alt="Google"/>
-                    </div>
-                    <p className="btn-text"><b>Iniciar con Google</b></p>
-                  </div>
-                   
+                        
                   </div>
 
-                  
                   <p className="mb-5 pb-lg-2 dn-account text-center" >No tienes cuenta? <Link to="/register">Registrate</Link></p>
                 </form>
               </div>

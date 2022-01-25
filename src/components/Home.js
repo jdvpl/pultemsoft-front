@@ -11,17 +11,14 @@ const Home = () => {
 
   const [user, setuser] = useState(null);
 
-  
+  onAuthStateChanged(auth,(usuarioFirebase)=>{
+    if(usuarioFirebase){
+      setuser(usuarioFirebase)
+    }else{
+      setuser(null);
+    }
+  })
 
-  useEffect(() => {
-    onAuthStateChanged(auth,(usuarioFirebase)=>{
-      if(usuarioFirebase){
-        setuser(usuarioFirebase)
-      }else{
-        setuser(null);
-      }
-    })
-  }, []);
 
   return (
     <div>

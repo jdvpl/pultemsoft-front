@@ -1,10 +1,16 @@
 import React from 'react';
 import firebaseapp from '../config/firebase-config';
-import {getAuth,onAuthStateChanged} from 'firebase/auth';
+import {getAuth,signOut} from 'firebase/auth';
 const auth = getAuth(firebaseapp);
 const Data = () => {
+  console.log(auth.lastNotifiedUid);
   return (
-  <div>hola</div>
+  <div>
+
+    <button onClick={()=>signOut(auth)} >Cerrar sesion</button>
+
+  </div>
+
   );
 };
 

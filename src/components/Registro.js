@@ -1,13 +1,26 @@
 import {Link} from 'react-router-dom';
 import Logo from '../pultemsoft.png';
-import React,{useState} from 'react';
+import React,{useState,useEffect} from 'react';
 import firebaseapp from '../config/firebase-config';
-import {getAuth,createUserWithEmailAndPassword} from 'firebase/auth';
+import {getAuth,createUserWithEmailAndPassword,onAuthStateChanged} from 'firebase/auth';
 import { useHistory } from 'react-router-dom';
+import axios from 'axios';
 const auth = getAuth(firebaseapp);
+
+
+
+
 const Registro = () => {
   let history = useHistory();
   const [error, seterror] = useState(false);
+
+  useEffect(() => {
+    onAuthStateChanged(auth,(usuarioFirebase)=>{
+      if(usuarioFirebase){
+        history.push('/')
+      }
+    })
+  }, []);
 
   const OnSubmitHandler =(e)=>{
     e.preventDefault();
@@ -26,13 +39,16 @@ const Registro = () => {
 
   const regitarUsuario= async (name,documen,email,password) => {
 
-      const user=await createUserWithEmailAndPassword(auth,email,password).then(user => {
+      const user=await createUserWithEmailAndPassword(auth,email,password).then(userInfo => {
         history.push('/')
-        return user;
+        return userInfo;
       })
 
-      console.log(user);
-
+      const id=user.user.uid;
+      const data={id:id,name:name,document:documen,email:email}
+      const url='https://us-central1-pultemsoft.cloudfunctions.net/app/api/adduser';
+      const response=await axios.post(url,data);
+      console.log(response);
   }
   return  <div >
   <section >
