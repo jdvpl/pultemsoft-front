@@ -1,17 +1,44 @@
-.bd-placeholder-img {
-  font-size: 1.125rem;
-  text-anchor: middle;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  user-select: none;
+.divider:after,
+.divider:before {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: #eee;
 }
-
-@media (min-width: 768px) {
-  .bd-placeholder-img-lg {
-    font-size: 3.5rem;
+.h-custom {
+  height: calc(100% - 73px);
+}
+@media (max-width: 450px) {
+  .h-custom {
+    height: 100%;
   }
 }
 
-.App{
-  text-align: center;
+.border_radius_1{
+  border-radius:1rem;
+}
+
+.logo_radius{
+  border-radius: 1rem 0 0 1rem;
+}
+
+.fa-color{
+  color: #ff6219;
+}
+
+.w-letter-bold{
+  letter-spacing: 1px;
+}
+
+.dn-account{
+  color: #393f81;
+}
+
+.color_register{
+  color: #393f81;
+}
+
+.btn-green{
+  background-color: #2a6b70 !important;
+  color: #fff !important;
 }

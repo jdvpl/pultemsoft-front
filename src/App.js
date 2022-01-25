@@ -1,32 +1,16 @@
-
+import {BrowserRouter as Router, Switch, Route} from 'react-router-dom'
+import Login from './components/Login';
+import Registro from './components/Registro';
 function App() {
   return (
-    <div className="bg-warning text-center">
-      <main className="form-signin">
-  <form>
-    <img className="mb-4" src="https://getbootstrap.com/docs/5.0/assets/brand/bootstrap-logo.svg" alt="" width="72" height="57"/>
-    <h1 className="h3 mb-3 fw-normal">Iniciar sesión</h1>
-
-    <div className="form-floating">
-      <input type="email" className="form-control" id="floatingInput" placeholder="name@example.com"/>
-      <label for="floatingInput">Correo electronico</label>
-    </div>
-    <div className="form-floating">
-      <input type="password" className="form-control" id="floatingPassword" placeholder="Password"/>
-      <label for="floatingPassword">Contraseña</label>
-    </div>
-
-    <div className="checkbox mb-3">
-      <label>
-        <input type="checkbox" value="remember-me"/> Recordar mi cuenta
-      </label>
-    </div>
-    <button className="w-100 btn btn-lg btn-primary" type="submit">Entrar</button>
-    <p className="mt-5 mb-3 text-muted">&copy; 2021-2022</p>
-  </form>
-</main>
-    </div>
+    <div >
+  <Router>
+    <Switch>
+      <Route exact path="/"><Login/></Route>
+      <Route exact path="/register"><Registro/></Route>
+    </Switch>
+</Router>
+</div>
   );
 }
-
 export default App;
