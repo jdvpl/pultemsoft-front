@@ -3,9 +3,12 @@ import firebaseapp from '../config/firebase-config';
 import {getAuth,signOut} from 'firebase/auth';
 import Navbar from './Navbar';
 import Salud from '../salud.jpeg';
-const auth = getAuth(firebaseapp);
-const Data = ({data}) => {
+import Map from './Maps';
 
+const auth = getAuth(firebaseapp);
+
+const Data = ({data}) => {
+  
  const {name,email,document,lat,lng}=data;
   return (
   <div>
@@ -16,8 +19,8 @@ const Data = ({data}) => {
     name={data.name}
    />
 
-<section className="vh-100 section_data" >
-  <div className="container py-5 h-500">
+<section className="section_data" >
+  <div className="container py-5">
     <div className="row d-flex justify-content-center align-items-center h-100">
       <div className="col col-md-9 col-lg-7 col-xl-5">
         <div className="card radius_card" >
@@ -49,6 +52,16 @@ const Data = ({data}) => {
     </div>
   </div>
 </section>
+<div className="row container">
+  <div className="col-md-6">
+  <Map
+    latitud={lat}
+    longitud={lng}
+   />
+
+  </div>
+  <div className="col-md-6"></div>
+</div>
    
   </div>
 
