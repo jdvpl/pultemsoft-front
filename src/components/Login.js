@@ -1,13 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 
 import {Link} from 'react-router-dom';
 import Logo from '../pultemsoft.png';
+import Salud from '../salud.jpeg';
 import firebaseapp from '../config/firebase-config';
 import {getAuth,signInWithEmailAndPassword} from 'firebase/auth';
+import Error from './Error';
 const auth = getAuth(firebaseapp);
 
 const Login = () => {
-
+  const [error, seterror] = useState(false);
+  const [mensajeError, setmensajeError] = useState('');
   const OnSubmitHandler=(e) => {
     e.preventDefault();
     const email = e.target.elements.email.value;
@@ -16,9 +19,15 @@ const Login = () => {
     Login(email, password);
   }
   const Login=async(email, password)=>{
-    const user=await signInWithEmailAndPassword(auth,email,password).then(userInfo => {
-      return userInfo;
-    })
+
+    try {
+      await signInWithEmailAndPassword(auth,email,password).then(userInfo => {
+        return userInfo;
+      })
+    } catch (error) {
+      seterror(true)
+      setmensajeError(error.message)
+    }
     
   }
   return (
@@ -32,7 +41,7 @@ const Login = () => {
           <div className="row g-0">
             <div className="col-md-6 col-lg-5 d-none d-md-block">
               <img
-                src="https://www.elcallejero.co/wp-content/uploads/2019/08/cuida-tu-salud-el-callejero.jpg"
+                src={Salud}
                 alt="login form"
                 className="img-fluid logo_radius" 
               />
@@ -46,6 +55,9 @@ const Login = () => {
                       <img src={Logo} alt="pultemsoft" className="img-fluid w-50"/>
                     </span>
                   </div>
+                  {error ? (
+              <Error mensaje={mensajeError}/>
+            ): null}
                   <div className="form-outline mb-4">
                     <input type="text" id="email" className="form-control form-control-lg" />
                     <label className="form-label" htmlFor="form2Example17">Correo</label>

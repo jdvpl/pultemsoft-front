@@ -84,3 +84,25 @@
 .google-btn:active {
   background: #1669f2;
 }
+
+.btn-user{
+  pointer-events: none;
+}
+
+
+
+.radius_card{
+  border-radius: 15px;
+}
+
+.name_data{
+  color: #2b2a2a;
+}
+
+.img_profile{
+  width: 180px; border-radius: 10px;
+}
+
+.illneses{
+  background-color: #efefef;
+}

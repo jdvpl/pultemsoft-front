@@ -1,26 +1,37 @@
-import {Link} from 'react-router-dom';
-import Logo from '../pultemsoft.png';
 import React,{useState,useEffect} from 'react';
 import firebaseapp from '../config/firebase-config';
-import {getAuth,createUserWithEmailAndPassword,onAuthStateChanged} from 'firebase/auth';
-import { useHistory } from 'react-router-dom';
+import { useHistory,Link } from 'react-router-dom';
 import axios from 'axios';
-const auth = getAuth(firebaseapp);
-
-
+import {getAuth,signInWithEmailAndPassword,onAuthStateChanged} from 'firebase/auth';
+import Error from './Error';
+import Logo from '../pultemsoft.png';
+import Mundial from '../mundial.jpeg';
 
 
 const Registro = () => {
+  const auth = getAuth(firebaseapp);
   let history = useHistory();
   const [error, seterror] = useState(false);
+  const [mensajeError, setmensajeError] = useState('');
 
+  let latitud;
+  let longitud;
+  navigator.geolocation.getCurrentPosition(function (position) {
+    latitud=position.coords.latitude;
+    longitud=position.coords.longitude
+  })
   useEffect(() => {
+
+    
     onAuthStateChanged(auth,(usuarioFirebase)=>{
       if(usuarioFirebase){
         history.push('/')
       }
     })
   }, []);
+
+  
+  
 
   const OnSubmitHandler =(e)=>{
     e.preventDefault();
@@ -30,26 +41,54 @@ const Registro = () => {
      const password = e.target.elements.password.value;
      if(name.trim()==='' || documen.trim()==='' || email.trim()==='' || password.trim()===''){
       seterror(true);
+      setmensajeError("Todos los campos son obligatorios")
       return;
      }else{
        seterror(false);
-       regitarUsuario(name,documen,email, password)
+       setmensajeError('');
+       if(latitud!=null && longitud !=null){
+         try {
+           regitarUsuario(name,documen,email, password,latitud,longitud);
+         } catch (error) {
+           console.log(error);
+         }
+       }else{
+         seterror(true);
+         setmensajeError("No hemos detectado tu ubicacion");
+       }
      }
   }
 
-  const regitarUsuario= async (name,documen,email,password) => {
-
-      const user=await createUserWithEmailAndPassword(auth,email,password).then(userInfo => {
+  const regitarUsuario= async (name,documen,email,password,latitud,longitud) => {
+      const data={name:name,document:documen,email:email,password:password,lat:latitud,lng:longitud}
+      const url='https://us-central1-pultemsoft.cloudfunctions.net/app/createUser';
+      try {
+        const response=await axios.post(url,data);
+      if(response.status ===200){
+        Login(email,password);
         history.push('/')
+      }
+      } catch (error) {
+        
+        seterror(true)
+        setmensajeError("Documento ya registrado.")
+      }
+      
+  }
+
+  const Login=async(email, password)=>{
+
+    try {
+      const user=await signInWithEmailAndPassword(auth,email,password).then(userInfo => {
         return userInfo;
       })
-
-      const id=user.user.uid;
-      const data={id:id,name:name,document:documen,email:email}
-      const url='https://us-central1-pultemsoft.cloudfunctions.net/app/api/adduser';
-      const response=await axios.post(url,data);
-      console.log(response);
+    } catch (error) {
+      seterror(true)
+      setmensajeError(error.message)
+    }
+    
   }
+
   return  <div >
   <section >
 <div className="container-fluid py-5 h-100">
@@ -57,13 +96,8 @@ const Registro = () => {
     <div className="col col-xl-10">
       <div className="card border_radius_1" >
         <div className="row g-0">
-          
           <div className="col-md-6 col-lg-7 d-flex align-items-center">
             <div className="card-body p-4 p-lg-5 text-black">
-
-            {error ? (
-              <p className="alert alert-danger error text-center p-2">Todos los campos son obligatorios</p>
-            ): null}
               <form onSubmit={OnSubmitHandler}>
                 <div className="d-flex align-items-center mb-3 pb-1">
                   <i className="fas fa-cubes fa-2x me-3 fa-color" ></i>
@@ -71,6 +105,9 @@ const Registro = () => {
                     <img src={Logo} alt="pultemsoft" className="img-fluid w-50"/>
                   </span>
                 </div>
+                {error ? (
+              <Error mensaje={mensajeError}/>
+            ): null}
                 <div className="form-outline mb-4">
                   <input type="text" id="name" className="form-control form-control-lg" />
                   <label className="form-label" htmlFor="form2Example17">Nombre</label>
@@ -97,7 +134,7 @@ const Registro = () => {
 
           <div className="col-md-6 col-lg-5 d-none d-md-block mt-5">
             <img
-              src="https://www.ehcos.com/wp-content/uploads/2017/11/dia-mundial-ux-900x550.jpg"
+              src={Mundial}
               alt="login form"
               className="img-fluid logo_radius "  
             />
