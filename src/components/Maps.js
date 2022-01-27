@@ -8,7 +8,6 @@ const Map = ({latitud,longitud}) => {
   const lat=parseFloat(latitud)
   const lng=parseFloat(longitud)
   const containerStyle = {
-    width: '50vw',
     height: '50vh'
   };
   const center = {

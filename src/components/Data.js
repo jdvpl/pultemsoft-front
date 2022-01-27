@@ -9,9 +9,10 @@ const auth = getAuth(firebaseapp);
 
 const Data = ({data}) => {
   
- const {name,email,document,lat,lng}=data;
+ const {name,email,document,lat,lng,illnesses,status,eps}=data;
+
   return (
-  <div>
+  <div >
   <Navbar button={
   <button onClick={()=>signOut(auth)}
     className="btn-green btn"
@@ -19,49 +20,61 @@ const Data = ({data}) => {
     name={data.name}
    />
 
-<section className="section_data" >
-  <div className="container py-5">
-    <div className="row d-flex justify-content-center align-items-center h-100">
-      <div className="col col-md-9 col-lg-7 col-xl-5">
-        <div className="card radius_card" >
-          <div className="card-body p-4">
-            <div className="d-flex text-black">
-              <div className="flex-shrink-0">
-                <img src={Salud} alt="Generic placeholder image" className="img-fluid img_profile" />
-              </div>
-              <div className="flex-grow-1 ms-3">
-                <h5 className="mb-1">{name}</h5>
-                <p className="mb-2 pb-1 name_data" >{document}</p>
-                <div className="d-flex justify-content-start rounded-3 p-2 mb-2 illneses" >
-                  <div className="px-3">
-                    <p className="small text-muted mb-1">latitud</p>
-                    <p className="mb-0">{lat}</p>
-                  </div>
-                  <div className="px-3">
-                    <p className="small text-muted mb-1">Longitud</p>
-                    <p className="mb-0">{lng}</p>
-                  </div>
-             
-                </div>
-               
-              </div>
-            </div>
-          </div>
-        </div>
+<div className="container mt-3">
+<div className="card">
+  <h5 className="card-header">{name}</h5>
+  <div className="card-body">
+    <h5 className="card-title text-center"> Mi informacion: </h5>
+  <div className="row">
+
+  <div className="col-md-4">
+  <img src={Salud} alt="Generic placeholder image" className="img-fluid w-sm-50" />
+  </div>
+   
+      <div className="col-md-4">
+      <h5>Documento</h5>
+      <p>{document}</p>
+      <h5>Correo</h5>
+      <p>{email}</p>
+      <h5>Eps</h5>
+      <p>{eps}</p>
+        <h5>Sintomas</h5>
+        <h6>
+      {
+        illnesses
+      }
+        </h6>
+      {status}
+       
+      </div>
+      <div className="col-md-4">
+      
+      <h5>Latitud</h5>
+        <p>
+        {lat}
+        </p>
+      <h5>Longitud</h5>
+        {lng}
       </div>
     </div>
+
   </div>
-</section>
-<div className="row container">
-  <div className="col-md-6">
+</div>
+
+<div className="row my-3">
+  <div className="col-md-6 col-sm-12">
   <Map
     latitud={lat}
     longitud={lng}
    />
-
   </div>
   <div className="col-md-6"></div>
 </div>
+</div>
+
+
+
+
    
   </div>
 

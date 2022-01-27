@@ -59,12 +59,12 @@ const Login = () => {
               <Error mensaje={mensajeError}/>
             ): null}
                   <div className="form-outline mb-4">
-                    <input type="text" id="email" className="form-control form-control-lg" />
                     <label className="form-label" htmlFor="form2Example17">Correo</label>
+                    <input type="text" id="email" className="form-control form-control-lg" />
                   </div>
                   <div className="form-outline mb-4">
-                    <input type="password" id="password" className="form-control form-control-lg" />
                     <label className="form-label" htmlFor="form2Example27">Contraseña</label>
+                    <input type="password" id="password" className="form-control form-control-lg" />
                   </div>
                   <div className="pt-1 mb-4 d-grid mx-5">
                     <button className="btn btn-green btn-lg btn-block" type="submit">Iniciar sesion</button>

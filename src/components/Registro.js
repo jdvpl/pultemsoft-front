@@ -39,7 +39,8 @@ const Registro = () => {
      const documen = e.target.elements.document.value;
      const email = e.target.elements.email.value;
      const password = e.target.elements.password.value;
-     if(name.trim()==='' || documen.trim()==='' || email.trim()==='' || password.trim()===''){
+     const eps = e.target.elements.eps.value;
+     if(name.trim()==='' || documen.trim()==='' || eps.trim()===''|| email.trim()==='' || password.trim()===''){
       seterror(true);
       setmensajeError("Todos los campos son obligatorios")
       return;
@@ -48,7 +49,7 @@ const Registro = () => {
        setmensajeError('');
        if(latitud!=null && longitud !=null){
          try {
-           regitarUsuario(name,documen,email, password,latitud,longitud);
+           regitarUsuario(name,documen,eps,email, password,latitud,longitud);
          } catch (error) {
            console.log(error);
          }
@@ -59,8 +60,8 @@ const Registro = () => {
      }
   }
 
-  const regitarUsuario= async (name,documen,email,password,latitud,longitud) => {
-      const data={name:name,document:documen,email:email,password:password,lat:latitud,lng:longitud}
+  const regitarUsuario= async (name,documen,eps,email,password,latitud,longitud) => {
+      const data={name:name,document:documen,eps:eps,email:email,password:password,lat:latitud,lng:longitud}
       const url='https://us-central1-pultemsoft.cloudfunctions.net/app/createUser';
       try {
         const response=await axios.post(url,data);
@@ -109,20 +110,24 @@ const Registro = () => {
               <Error mensaje={mensajeError}/>
             ): null}
                 <div className="form-outline mb-4">
-                  <input type="text" id="name" className="form-control form-control-lg" />
                   <label className="form-label" htmlFor="form2Example17">Nombre</label>
+                  <input type="text" id="name" className="form-control form-control-lg" />
                 </div>
                 <div className="form-outline mb-4">
-                  <input type="text" id="document" className="form-control form-control-lg" />
                   <label className="form-label" htmlFor="form2Example17">Cedula</label>
+                  <input type="text" id="document" className="form-control form-control-lg" />
                 </div>
                 <div className="form-outline mb-4">
-                  <input type="email" id="email" className="form-control form-control-lg" />
+                  <label className="form-label" htmlFor="form2Example17">Eps</label>
+                  <input type="text" id="eps" className="form-control form-control-lg" />
+                </div>
+                <div className="form-outline mb-4">
                   <label className="form-label" htmlFor="form2Example17">Correo</label>
+                  <input type="email" id="email" className="form-control form-control-lg" />
                 </div>
                 <div className="form-outline mb-4">
-                  <input type="password" id="password" className="form-control form-control-lg" />
                   <label className="form-label" htmlFor="password" required>Contraseña</label>
+                  <input type="password" id="password" className="form-control form-control-lg" />
                 </div>
                 <div className="pt-1 mb-4 d-grid mx-5">
                   <button className="btn btn-green btn-lg btn-block" type="submit">Registrame</button>
