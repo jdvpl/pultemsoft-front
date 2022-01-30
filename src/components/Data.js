@@ -1,16 +1,26 @@
+/* eslint-disable jsx-a11y/img-redundant-alt */
 import React from 'react';
 import firebaseapp from '../config/firebase-config';
 import {getAuth,signOut} from 'firebase/auth';
 import Navbar from './Navbar';
 import Salud from '../salud.jpeg';
 import Map from './Maps';
+import Update from './Update';
 
 const auth = getAuth(firebaseapp);
 
 const Data = ({data}) => {
   
- const {name,email,document,lat,lng,illnesses,status,eps}=data;
+ const {name,email,document,lat,lng,illnesses,status,eps,temp,sop2,hr,ir,phone,created_At}=data;
+  var timeDate=created_At;
+  var date = new Date(timeDate);
 
+  const fecha_completa="Date: "+date.getDate()+
+          "/"+(date.getMonth()+1)+
+          "/"+date.getFullYear()+
+          " "+date.getHours()+
+          ":"+date.getMinutes()+
+          ":"+date.getSeconds();
   return (
   <div >
   <Navbar button={
@@ -43,12 +53,20 @@ const Data = ({data}) => {
       {
         illnesses
       }
+      <h5>Estado:</h5>
         </h6>
-      {status}
+      {status==="available" ? "Disponible" : "No disponible"}
        
       </div>
       <div className="col-md-4">
-      
+      <h5>Temperatura</h5>
+      {temp}
+      <h5>Saturacion</h5>
+      {sop2}
+      <h5>BPM : IR</h5>
+      {hr} :{ir}
+      <h5>Telefono</h5>
+      {phone}
       <h5>Latitud</h5>
         <p>
         {lat}
@@ -57,7 +75,8 @@ const Data = ({data}) => {
         {lng}
       </div>
     </div>
-
+      <h5 className='text-center'>Fecha de registro</h5>
+      <h6 className='text-center'>{fecha_completa}</h6>
   </div>
 </div>
 
@@ -68,7 +87,9 @@ const Data = ({data}) => {
     longitud={lng}
    />
   </div>
-  <div className="col-md-6"></div>
+  <div className="col-md-6">
+    <Update/>
+  </div>
 </div>
 </div>
 

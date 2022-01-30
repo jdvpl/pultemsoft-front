@@ -40,7 +40,8 @@ const Registro = () => {
      const email = e.target.elements.email.value;
      const password = e.target.elements.password.value;
      const eps = e.target.elements.eps.value;
-     if(name.trim()==='' || documen.trim()==='' || eps.trim()===''|| email.trim()==='' || password.trim()===''){
+     const phone = e.target.elements.phone.value;
+     if(name.trim()==='' || documen.trim()==='' || eps.trim()===''|| email.trim()==='' || password.trim()==='' || phone.trim()===''){
       seterror(true);
       setmensajeError("Todos los campos son obligatorios")
       return;
@@ -49,7 +50,7 @@ const Registro = () => {
        setmensajeError('');
        if(latitud!=null && longitud !=null){
          try {
-           regitarUsuario(name,documen,eps,email, password,latitud,longitud);
+           regitarUsuario(name,documen,eps,email, password,phone,latitud,longitud);
          } catch (error) {
            console.log(error);
          }
@@ -60,8 +61,8 @@ const Registro = () => {
      }
   }
 
-  const regitarUsuario= async (name,documen,eps,email,password,latitud,longitud) => {
-      const data={name:name,document:documen,eps:eps,email:email,password:password,lat:latitud,lng:longitud}
+  const regitarUsuario= async (name,documen,eps,email,password,phone,latitud,longitud) => {
+      const data={name:name,document:documen,eps:eps,email:email,password:password,lat:latitud,lng:longitud,phone:phone}
       const url='https://us-central1-pultemsoft.cloudfunctions.net/app/createUser';
       try {
         const response=await axios.post(url,data);
@@ -69,6 +70,7 @@ const Registro = () => {
         Login(email,password);
         history.push('/')
       }
+      console.log(response)
       } catch (error) {
         
         seterror(true)
@@ -120,6 +122,10 @@ const Registro = () => {
                 <div className="form-outline mb-4">
                   <label className="form-label" htmlFor="form2Example17">Eps</label>
                   <input type="text" id="eps" className="form-control form-control-lg" />
+                </div>
+                <div className="form-outline mb-4">
+                  <label className="form-label" htmlFor="form2Example17">Telefono</label>
+                  <input type="tel" id="phone" className="form-control form-control-lg" />
                 </div>
                 <div className="form-outline mb-4">
                   <label className="form-label" htmlFor="form2Example17">Correo</label>
