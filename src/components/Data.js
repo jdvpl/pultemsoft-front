@@ -11,7 +11,7 @@ const auth = getAuth(firebaseapp);
 
 const Data = ({data}) => {
   
- const {id,name,email,document,lat,lng,illnesses,status,eps,temp,sop2,hr,phone,created_At}=data;
+ const {id,name,email,document,lat,lng,illnesses,status,eps,temp,spo2,hr,phone,created_At}=data;
   var timeDate=created_At;
   var date = new Date(timeDate);
   let enfermedades=[]
@@ -65,7 +65,7 @@ const Data = ({data}) => {
       <h5>Temperatura</h5>
       {temp}
       <h5>Saturacion</h5>
-      {sop2}
+      {spo2}
       <h5>BPM </h5>
       {hr} 
       <h5>Telefono</h5>

@@ -2,10 +2,15 @@ import React,{useState} from 'react';
 import CreatableSelect from "react-select/creatable";
 import Swal from 'sweetalert2/dist/sweetalert2.js'
 import Error from './Error';
+import axios from 'axios';
+import { useHistory } from 'react-router-dom';
 
 const Update = ({id,lat,lng}) => {
     const [error, seterror] = useState(false);
     const [mensajeError, setmensajeError] = useState('');
+    let history = useHistory();
+
+
 
     const options=[
         {value:"Vomito ",label:"Vomito"},
@@ -21,71 +26,94 @@ const Update = ({id,lat,lng}) => {
         {value:"cancer ",label:"cancer"},
         {value:"Ebola ",label:"Ebola"}
     ];
+    let latitud;
+    let longitude;
+    navigator.geolocation.getCurrentPosition(function (position) {
+        latitud=position.coords.latitude;
+        longitude=position.coords.longitude
+    })
     const [selectedOption, setselectedOption] = useState([]);
     const handleChange=(selectedOption)=>{
         setselectedOption(selectedOption);
     }
     const dataTosend=[]
     selectedOption.map( (data)=> dataTosend.push(data["value"]));
-
     const OnSubmitHandler =(e)=>{
         e.preventDefault();
-        
-        const swalWithBootstrapButtons = Swal.mixin({
-            customClass: {
-              confirmButton: 'btn btn-success',
-              cancelButton: 'btn btn-danger'
-            },
-            buttonsStyling: false
-          })
-          
-          swalWithBootstrapButtons.fire({
-            title: 'Quieres actualizar tu ubicacion actual?',
-            text: "Al seleccionar 'Si quiero' el navegador tomara la nueva ubicacion.",
-            icon: 'info',
-            showCancelButton: true,
-            confirmButtonText: 'Si quiero!',
-            cancelButtonText: 'Solo continuar!',
-            reverseButtons: true
-          }).then((result) => {
-            if (result.isConfirmed) {
-                const lattnt=getLatitudAndLongitude();
-                if(lattnt.lat != null && lattnt.lng !=null){
-                    
-                    swalWithBootstrapButtons.fire(
-                        'Datos actualizados!',
-                        'Tus datos han sidos actualizados',
-                        'success'
-                    )
+        const  temp = e.target.elements.temp.value;
+        const  spo2 = e.target.elements.spo2.value;
+        const  bpm = e.target.elements.bpm.value;
+
+        if(temp.trim()==='' || spo2.trim()==='' || bpm.trim()==='' || dataTosend.length===0){
+            seterror(true);
+            setmensajeError("Todos los campos son obligatorios")
+            return;
+        }else{
+            seterror(false)
+            setmensajeError('')
+            const swalWithBootstrapButtons = Swal.mixin({
+                customClass: {
+                  confirmButton: 'btn btn-success',
+                  cancelButton: 'btn btn-info me-5'
+                },
+                buttonsStyling: false
+            })
+            
+            swalWithBootstrapButtons.fire({
+                title: 'Quieres actualizar tu ubicacion actual?',
+                text: "Al seleccionar 'Si quiero' el navegador tomara la nueva ubicacion.",
+                icon: 'info',
+                showCancelButton: true,
+                confirmButtonText: 'Si quiero!',
+                cancelButtonText: 'No actualizar ubicacion!',
+                reverseButtons: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+
+                    if(latitud!=null && longitude !=null){
+                        updateData(id,latitud,longitude,dataTosend,temp,spo2,bpm);
+                        swalWithBootstrapButtons.fire(
+                            'Datos actualizados!',
+                            'Tus datos han sidos actualizados',
+                            'success'
+                        )
+                    }
+                } else if (
+                  /* Read more about handling dismissals below */
+                result.dismiss === Swal.DismissReason.cancel
+                ) {
+                    updateData(id,lat,lng,dataTosend,temp,spo2,bpm);
+                swalWithBootstrapButtons.fire(
+                    'Actualizado',
+                    'Tus datos han sidos actualizados',
+                    'info'
+                )
                 }
-            } else if (
-              /* Read more about handling dismissals below */
-            result.dismiss === Swal.DismissReason.cancel
-            ) {
-            swalWithBootstrapButtons.fire(
-                'Cancelled',
-                'Your imaginary file is safe :)',
-                'error'
-            )
-            }
-        })
-
-        console.log(dataTosend)
-    }
-
-    const getLatitudAndLongitude=()=>{
-        let info={
-            lat,
-            lng
+            })
         }
-        navigator.geolocation.getCurrentPosition(function (position) {
-            info.lat=position.coords.latitude;
-            info.lng=position.coords.longitude
-        })
-        // eslint-disable-next-line no-sequences
-        return info;
+        
     }
-    console.log(id,lat,lng)
+
+    const updateData=async(id,latitud,longitud,illnesses,temp,spo2,bpm)=>{
+        console.log(id,latitud,longitud,illnesses,temp,spo2,bpm);
+        const data={lat:latitud,lng:longitud,illnesses:illnesses,temp:temp,spo2:`${spo2}%`,hr:bpm}
+        const url=`https://us-central1-pultemsoft.cloudfunctions.net/app/api/user/${id}`;
+        try {
+          const response=await axios.put(url,data);
+        if(response.status ===200){
+          history.go(0)
+        }
+        } catch (error) {
+          
+          seterror(true)
+          setmensajeError("Error")
+        }
+        
+    }
+
+
+       
+
   return <div>
     <form  onSubmit={OnSubmitHandler}>
     {error ? (
