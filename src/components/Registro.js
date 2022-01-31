@@ -22,26 +22,25 @@ const Registro = () => {
   })
   useEffect(() => {
 
-    
     onAuthStateChanged(auth,(usuarioFirebase)=>{
       if(usuarioFirebase){
         history.push('/')
       }
     })
-  }, []);
+  }, [auth, history]);
 
   
   
 
   const OnSubmitHandler =(e)=>{
     e.preventDefault();
-    const name = e.target.elements.name.value;
-     const documen = e.target.elements.document.value;
-     const email = e.target.elements.email.value;
-     const password = e.target.elements.password.value;
-     const eps = e.target.elements.eps.value;
-     const phone = e.target.elements.phone.value;
-     if(name.trim()==='' || documen.trim()==='' || eps.trim()===''|| email.trim()==='' || password.trim()==='' || phone.trim()===''){
+    const  name = e.target.elements.name.value;
+    const documen = e.target.elements.document.value;
+    const email = e.target.elements.email.value;
+    const password = e.target.elements.password.value;
+    const eps = e.target.elements.eps.value;
+    const phone = e.target.elements.phone.value;
+    if(name.trim()==='' || documen.trim()==='' || eps.trim()===''|| email.trim()==='' || password.trim()==='' || phone.trim()===''){
       seterror(true);
       setmensajeError("Todos los campos son obligatorios")
       return;

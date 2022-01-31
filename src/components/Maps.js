@@ -11,9 +11,11 @@ const Map = ({latitud,longitud}) => {
     height: '50vh'
   };
   const center = {
-    lat: +lat,
-    lng: +lng
+    // eslint-disable-next-line use-isnan
+    lat: 4.6777463,
+    lng: -74.0929682
   };
+  
   const { isLoaded } = useJsApiLoader({
     id: 'jdvpl',
     googleMapsApiKey: credentials.mapsKey,
@@ -36,7 +38,8 @@ const Map = ({latitud,longitud}) => {
   return isLoaded ? (
       <GoogleMap
         mapContainerStyle={containerStyle}
-        center={center}
+        // eslint-disable-next-line use-isnan
+        center=  { center}
         zoom={20}
         onLoad={onLoad}
         onUnmount={onUnmount}

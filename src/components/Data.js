@@ -11,10 +11,13 @@ const auth = getAuth(firebaseapp);
 
 const Data = ({data}) => {
   
- const {name,email,document,lat,lng,illnesses,status,eps,temp,sop2,hr,ir,phone,created_At}=data;
+ const {id,name,email,document,lat,lng,illnesses,status,eps,temp,sop2,hr,phone,created_At}=data;
   var timeDate=created_At;
   var date = new Date(timeDate);
-
+  let enfermedades=[]
+  if(illnesses !=null){
+    illnesses.map((val)=>enfermedades.push(val))
+  }
   const fecha_completa="Date: "+date.getDate()+
           "/"+(date.getMonth()+1)+
           "/"+date.getFullYear()+
@@ -49,12 +52,12 @@ const Data = ({data}) => {
       <h5>Eps</h5>
       <p>{eps}</p>
         <h5>Sintomas</h5>
-        <h6>
-      {
-        illnesses
-      }
+      {         
+        enfermedades.map((il) =>
+        <li key={il}>{il}</li>
+        )
+        }
       <h5>Estado:</h5>
-        </h6>
       {status==="available" ? "Disponible" : "No disponible"}
        
       </div>
@@ -63,8 +66,8 @@ const Data = ({data}) => {
       {temp}
       <h5>Saturacion</h5>
       {sop2}
-      <h5>BPM : IR</h5>
-      {hr} :{ir}
+      <h5>BPM </h5>
+      {hr} 
       <h5>Telefono</h5>
       {phone}
       <h5>Latitud</h5>
@@ -88,7 +91,11 @@ const Data = ({data}) => {
    />
   </div>
   <div className="col-md-6">
-    <Update/>
+    <Update
+      id={id}
+      lat={lat}
+      lng={lng}
+    />
   </div>
 </div>
 </div>

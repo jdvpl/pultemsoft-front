@@ -33,7 +33,6 @@ const Home = () => {
       const response=await axios.get(url).then(dat =>{
         const info=dat.data;
         setdata(info);
-        console.log(info);
       })
       return response;
       
